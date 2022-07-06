@@ -9,15 +9,15 @@ from django.conf import settings
 
 
 class Produto(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao_curta = models.TextField(max_length=100)
-    descricao_longa = models.TextField()
+    nome = models.CharField(max_length=255, verbose_name='nome')
+    descricao_curta = models.TextField(max_length=100, verbose_name='descrição curta')
+    descricao_longa = models.TextField(verbose_name='descrição longa')
     imagem_1 = models.ImageField(upload_to='produto_imagem/%Y/%m')
     imagem_2 = models.ImageField(upload_to='produto_imagem/%Y/%m', blank=True, null=True)
     imagem_3 = models.ImageField(upload_to='produto_imagem/%Y/%m', blank=True, null=True)
     slug = models.SlugField(unique=True)
-    preco_marketing = models.FloatField()
-    preco_marketing_promocional = models.FloatField(default=0)
+    preco_marketing = models.FloatField(verbose_name='preço marketing')
+    preco_marketing_promocional = models.FloatField(default=0, verbose_name='preço marketing promocional')
     tipo = models.CharField(
         default='V',
         max_length=1,
@@ -67,7 +67,7 @@ class Produto(models.Model):
 
 class Variacao(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=100)
     preco = models.FloatField()
     preco_promocional = models.FloatField(default=0)
     estoque = models.PositiveIntegerField(default=1)
