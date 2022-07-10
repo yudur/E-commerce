@@ -8,6 +8,12 @@ class VariacaoInline(admin.TabularInline):
 
 
 class ProdutoAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'preco_marketing', 'preco_marketing_promocional']
+    list_display_links = ['nome']
+    list_editable = ('preco_marketing', 'preco_marketing_promocional')
+    list_filter = ['tipo']
+    list_per_page = 10
+    search_fields = ['nome', 'slug', 'descricao_curta', 'descricao_longa']
     inlines = [VariacaoInline]
 
 
