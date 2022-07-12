@@ -13,10 +13,6 @@ class Produto(models.Model):
         max_length=200, verbose_name='descrição curta')
     descricao_longa = models.TextField(verbose_name='descrição longa')
     imagem_1 = models.ImageField(upload_to='produto_imagem/%Y/%m')
-    imagem_2 = models.ImageField(
-        upload_to='produto_imagem/%Y/%m', blank=True, null=True)
-    imagem_3 = models.ImageField(
-        upload_to='produto_imagem/%Y/%m', blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True, max_length=265)
     preco_marketing = models.FloatField(verbose_name='preço marketing')
     preco_marketing_promocional = models.FloatField(
@@ -45,12 +41,6 @@ class Produto(models.Model):
 
         if self.imagem_1:
             self.resize_img(self.imagem_1, 800)
-
-        if self.imagem_2:
-            self.resize_img(self.imagem_2, 800)
-
-        if self.imagem_3:
-            self.resize_img(self.imagem_3, 800)
 
     @staticmethod
     def resize_img(img, new_width=800):
