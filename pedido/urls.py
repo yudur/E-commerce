@@ -6,6 +6,6 @@ app_name = 'pedido'  # pedido:pay
 
 urlpatterns = [
     path('', views.Pay.as_view(), name='pay'),
-    path('closeorder/', views.CloseOrder.as_view(), name='closeorder'),
+    path('saveorder/', views.SaveOrder.as_view(), name='save_order'),
     path('details/', views.Details.as_view(), name='details'),
 ]

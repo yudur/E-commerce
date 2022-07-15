@@ -108,12 +108,38 @@ class AddToCart(View):
 
 class RemoveFromCart(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('RemoveFromCart')
+        http_referer = self.request.META.get(
+            'HTTP_REFERER',
+            reverse('produto:list')
+        )
+        variacao_id = self.request.GET.get('vid')
+
+        if not variacao_id:
+            return redirect(http_referer)
+
+        if not self.request.session.get('carrinho'):
+            return redirect(http_referer)
+
+        if variacao_id not in self.request.session['carrinho']:
+            return redirect(http_referer)
+
+        cart = self.request.session['carrinho'][variacao_id]
+
+        messages.success(self.request, 
+        f'Produto {cart["produto_nome"]} {cart["variacao_nome"]}'
+        f' foi removido do seu carrinho.')
+ 
+        del self.request.session['carrinho'][variacao_id]
+        self.request.session.save()
+        return redirect(http_referer)
 
 
 class Cart(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'produto/cart.html')
+        contexto = {
+            'carrinho': self.request.session.get('carrinho', {})
+        }
+        return render(self.request, 'produto/cart.html', contexto)
 
 
 class Finish(View):
