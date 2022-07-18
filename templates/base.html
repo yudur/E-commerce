@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 
@@ -6,6 +8,7 @@
     {% include 'parciais/_head.html' %}
 
     <title>{% block 'titulo' %}{% endblock %} | E-commerce</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'logo.ico' %}"/>
 </head>
 
 <body>

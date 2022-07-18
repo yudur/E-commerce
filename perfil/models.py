@@ -15,7 +15,7 @@ class Perfil(models.Model):
     data_nacimento = models.DateField(verbose_name='data de nacimento')
     cpf = models.CharField(max_length=11, verbose_name='CPF')
     endereco = models.CharField(max_length=50, verbose_name='endereço')
-    numero = models.CharField(max_length=12, verbose_name='telefone')
+    numero = models.CharField(max_length=12, verbose_name='Número')
     complemento = models.CharField(max_length=30, verbose_name='complemento')
     bairro = models.CharField(max_length=30, verbose_name='bairro')
     cep = models.CharField(max_length=8, verbose_name='CEP')
