@@ -11,39 +11,43 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
+            
+            {% if request.user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+                    Conta
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="{% url 'perfil:create' %}">Atualizar</a>
+                    <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="https://github.com/yudur">Github</a>
                 </div>
             </li>
+            {% else %}
+
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link" href="{% url 'perfil:create' %}">Entrar</a>
             </li>
+            {% endif %}
+
+            {% if request.session.carrinho %}
             <li class="nav-item">
                 <a class="nav-link nav-cart-link active" href="{% url 'produto:cart' %}">
                     <span class="nav-cart-text mr-1">
                         Carrinho
                     </span>
-                    {% if request.session.carrinho %}
                     <span class="nav-cart-count mr-1">
                         <strong>{{ request.session.carrinho|cart_total_qtd }}x</strong>
                     </span>
-                    {% endif %}
+                    
                     <span class="nav-cart-icon mr-2">
                         <i class="fas fa-shopping-cart"></i>
                     </span>
                 </a>
             </li>
+            {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

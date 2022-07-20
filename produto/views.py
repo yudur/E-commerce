@@ -144,4 +144,12 @@ class Cart(View):
 
 class Finish(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('Finish')
+        if not self.request.user.is_authenticated:
+            messages.warning(self.request, 'Crie uma conta ou log para realizar sua compra')
+            return redirect('perfil:create')
+
+        contexto = {
+            'usuario': self.request.user,
+            'carrinho': self.request.session['carrinho'],
+        }
+        return render(self.request, 'produto/finish.html', contexto)
