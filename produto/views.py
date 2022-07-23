@@ -5,6 +5,8 @@ from django.views.generic.detail import DetailView
 from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
+from django.db.models import Q
+
 from . import models
 from perfil import models as models_perfil
 
@@ -170,3 +172,23 @@ class Finish(View):
             'carrinho': self.request.session['carrinho'],
         }
         return render(self.request, 'produto/finish.html', contexto)
+
+
+class Search(ListProducts):
+    def get_queryset(self, *args, **kwargs):
+        termo = self.request.GET.get('termo') or self.request.session['termo']
+        qs = super().get_queryset(*args, **kwargs)
+        
+        if not termo:
+            return qs
+
+        self.request.session['termo'] =  termo
+
+        qs = qs.filter(
+            Q(nome__icontains=termo) |
+            Q(descricao_curta__icontains=termo) |
+            Q(descricao_longa__icontains=termo)
+        )
+
+        self.request.session.save()
+        return qs

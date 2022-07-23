@@ -60,6 +60,16 @@ class Perfil(models.Model):
 
     def clean(self) -> None:
         error_messages = {}
+
+        cpf_enviado = self.cpf or None
+        cpf_salvo = None
+        perfil = Perfil.objects.filter(cpf=cpf_enviado).first()
+
+        if perfil:
+            cpf_salvo = perfil.cpf
+
+            if cpf_salvo is not None and self.pk != perfil.pk:
+                error_messages['cpf'] = 'CPF já existe.'
         
         if self.numero.isalpha():
             error_messages['numero'] = 'digite um telefone válido.'
