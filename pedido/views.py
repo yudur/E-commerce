@@ -1,7 +1,7 @@
 from statistics import variance
 from django.shortcuts import render, redirect, reverse
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.http import HttpResponse
 from django.contrib import messages
 
@@ -11,26 +11,25 @@ from .models import Pedido, ItemPedido
 from utils import utils
 
 
-class DispatchLoginRequired(View):
+class DispatchLoginRequiredMixin(View):
     def dispatch(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('perfil:create')
 
         return super().dispatch(*args, **kwargs)
 
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(usuario=self.request.user)
+        return qs
 
 
-class Pay(DispatchLoginRequired, DetailView):
+class Pay(DispatchLoginRequiredMixin, DetailView):
     template_name = 'pedido/pay.html'
     model = Pedido
     pk_url_kwarg = 'pk'
     context_object_name = 'pedido'
 
-    def get_queryset(self, *args, **kwargs):
-        qs = super().get_queryset(*args, **kwargs)
-        qs = qs.filter(usuario=self.request.user)
-        return qs
-        
 
 class SaveOrder(View):
     template_name = 'pedido/pay.html'
@@ -124,11 +123,16 @@ class SaveOrder(View):
  
 
 
-class Details(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('Details')
+class Details(DispatchLoginRequiredMixin, DetailView):
+    model = Pedido
+    context_object_name = 'pedido'
+    template_name = 'pedido/details.html'
+    pk_url_kwarg = 'pk'
+    
 
-
-class List(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('List pedido')
+class List(DispatchLoginRequiredMixin, ListView):
+    model = Pedido
+    context_object_name = 'pedidos'
+    template_name = 'pedido/list.html'
+    paginate_by = 10
+    ordering = ['-id']

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load product_filters %}
+{% load static %}
+
+{% block 'titulo' %}Pagamento{% endblock %}
+
+{% block 'conteudo'%}
+
+{% include 'parciais/_pedido.html' %}
+
+{% endblock %}
