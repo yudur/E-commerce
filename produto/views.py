@@ -6,6 +6,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 from . import models
+from perfil import models as models_perfil
 
 
 class ListProducts(ListView):
@@ -147,6 +148,22 @@ class Finish(View):
         if not self.request.user.is_authenticated:
             messages.warning(self.request, 'Crie uma conta ou log para realizar sua compra')
             return redirect('perfil:create')
+
+        perfil = models_perfil.Perfil.objects.filter(usuario=self.request.user).exists()
+
+        if not perfil:
+            messages.warning(
+                self.request,
+                'Usuário sem perfil'
+            )
+            return redirect('perfil:create')
+
+        if not self.request.session.get('carrinho'):
+            messages.error(
+                self.request,
+                'Não há produtos para comprar.'
+            )
+            return redirect('produto:list')
 
         contexto = {
             'usuario': self.request.user,
