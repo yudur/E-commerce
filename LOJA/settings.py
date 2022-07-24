@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from django.contrib.messages import constants
 from django.core.management.utils import get_random_secret_key
+import django_heroku
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -155,3 +156,5 @@ SESSION_SAVE_EVERY_REQUEST = False
 # Para sessions em arquivos ao invés da base de dados
 # SESSION_ENGINE = "django.contrib.sessions.backends.file"
 # SESSION_FILE_PATH = '/home/luizotavio/Desktop/temp'
+
+django_heroku.settings(locals())
